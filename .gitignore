@@ -1,0 +1,48 @@
+# --- Dependencies ---
+node_modules/
+
+# --- Build outputs ---
+# Frontend (Vite)
+/dist/
+
+# Backend (generic)
+/build/
+coverage/
+
+# --- Logs ---
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# --- Env files ---
+.env
+.env.*
+!.env.sample
+
+# --- Caches / temp ---
+.cache/
+.tmp/
+.vite/
+
+# --- OS / Editor ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- Backend uploads (user-generated files) ---
+backend/uploads/
+
+# --- Backend env backups / secrets (if any) ---
+*.pem
+*.key
+
