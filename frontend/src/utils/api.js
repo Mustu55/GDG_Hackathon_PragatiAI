@@ -1,6 +1,5 @@
 // API Utility for Frontend
-// Vite proxy (vite.config.js) forwards /api/* to http://localhost:5000
-// So we use relative paths here - no BASE_URL needed
+const BASE_URL = import.meta.env.VITE_API_URL || '';
 
 const getToken = () => localStorage.getItem('pragati_token');
 
@@ -20,17 +19,24 @@ export const apiFetch = async (endpoint, options = {}) => {
     headers['Content-Type'] = 'application/json';
   }
 
-  const url = endpoint.startsWith('http') ? endpoint : endpoint;
+  const cleanBaseUrl = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
+  const url = endpoint.startsWith('http') ? endpoint : `${cleanBaseUrl}${endpoint}`;
 
   const response = await fetch(url, {
     ...options,
     headers,
   });
 
-  const data = await response.json();
+  let data;
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.indexOf("application/json") !== -1) {
+    data = await response.json();
+  } else {
+    data = { message: await response.text() }; // Fallback to text for non-JSON errors like 404/405 pages
+  }
 
   if (!response.ok) {
-    throw new Error(data.error || data.message || 'API Request Failed');
+    throw new Error(data.error || data.message || `API Request Failed with status ${response.status}`);
   }
 
   return data;
